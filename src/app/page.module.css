@@ -17,6 +17,7 @@
   display: flex;
   flex-flow: column nowrap;
   gap: 2rem;
+  z-index: 10;
   padding-bottom: 4rem;
   align-items: center;
   font-family: "Microsoft Sans Serif", sans-serif;
