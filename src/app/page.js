@@ -1,94 +1,105 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
+import { answers } from "./answers";
+import useMousePosition from "./useMouseMove";
 
 export default function Home() {
+  const [openedAnswer, setOpenedAnswer] = useState(false);
+  const [answerNum, setAnswerNum] = useState(0);
+
+  const [dragging, setDragging] = useState(false);
+
+  const [randLoc, setRandLoc] = useState({});
+
+  function handleButtonClick(num) {
+    setOpenedAnswer(true);
+    setAnswerNum(num);
+    const rand = Math.floor(Math.random() * 60);
+    // setRandLoc({ x: parseInt(rand) + "vw", y: parseInt(rand) + "vh" });
+  }
+
+  const mousePosition = useMousePosition();
+  function handleMouseDown(evt) {
+    evt.preventDefault();
+    setDragging(true);
+  }
+
+  function handleMouseUp(evt) {
+    evt.preventDefault();
+    setDragging(false);
+  }
+  function handleMouseMove() {
+    if (dragging) {
+      setRandLoc({
+        x: mousePosition.x - window.innerWidth / 4,
+        y: mousePosition.y - 16,
+      });
+    }
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main onMouseMove={handleMouseMove} className={styles.main}>
+      <div className={styles.container}>
+        <button onClick={() => handleButtonClick(0)}>
+          <h1>i am a designer, writer, and web artist</h1>
+        </button>
+
+        <button onClick={() => handleButtonClick(1)}>
+          <h1>manifestations of css in projects and art</h1>
+        </button>
+
+        {/* Do you have other pratices, such as writing, poetry, installation or performance, that you feel could be intertwined with the broader artistic aspect of the worksession? */}
+        <button onClick={() => handleButtonClick(2)}>
+          <h1>poetry, installation, and comics</h1>
+        </button>
+
+        <button onClick={() => handleButtonClick(3)}>
+          <h1>kernel and open source work</h1>
+        </button>
+      </div>
+      {openedAnswer && (
+        <div
+          className={styles.win98popup}
+          style={{ top: randLoc.y, left: randLoc.x }}
+        >
+          <div
+            className={styles.bar}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            <p>answer</p>
+            <button
+              className={styles.shadow}
+              onClick={() => setOpenedAnswer(false)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="8px"
+                height="7px"
+                viewBox="0 0 8 7"
+                fillRule="evenodd"
+                stroke-linejoin="round"
+                stroke-miterlimit="2"
+              >
+                <path d="M1 6V5h1V4h1V3h2v1h1v1h1v1h1v1H6V6H5V5H3v1H2v1H0V6h1zm0-4V1H0V0h2v1h1v1h2V1h1V0h2v1H7v1H6v1H2V2H1z" />
+              </svg>
+            </button>
+          </div>
+          <div
+            className={styles.text}
+            dangerouslySetInnerHTML={{ __html: answers[answerNum] }}
+          ></div>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+      )}
+      <div style={{ position: "absolute", left: "50vw" }}>
+        <embed
+          src="/ivan-zhao-resume.pdf"
+          width={400}
+          height={600}
+          alt="resume"
         />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
       </div>
     </main>
   );

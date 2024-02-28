@@ -105,3 +105,31 @@ a {
     color-scheme: dark;
   }
 }
+
+button {
+  background: #c2c6ca;
+  color: darkblue;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  outline: none;
+}
+
+button:active {
+  box-shadow: 0.5px 0.5px 0 0.5px white, inset 1px 1px black,
+    inset -1px -1px #c2c6ca, inset 2px 2px #85898d;
+}
+
+button:active > svg {
+  svg {
+    transform: translateX(1px) translateY(1px);
+  }
+}
+
+a {
+  color: blue;
+}
+
+a:hover {
+  color: darkblue;
+}
